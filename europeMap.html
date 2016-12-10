@@ -5,22 +5,23 @@
 		<title>Mercator projection</title>
 		<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://d3js.org/topojson.v1.min.js"></script>
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="scripts.js"></script>
 		<link rel="stylesheet" type="text/css" href="http://localhost:8000/map.css" media="screen" />
 	</head>
 	<body>
 
 
 	<div id="container">
-		<h1>World map centered on European countries</h1>
+		<h1>Mapa Europy</h1>
 
 	</div>
 		
-
 		<script type="text/javascript">
 
 			//Width and height
 			var w = 800;
-			var h = 600;
+			var h = 500;
             
             var div = d3.select("body").append("div")
                       .attr("class", "tooltip")
@@ -72,7 +73,19 @@
                     });
                 
 			});
+        
 
 		</script>
+        
+        <div class="checkboxes">
+            <label>Populacja<input type="checkbox" class="sport"/></label>
+            <label>Inflacja<input type="checkbox" name="categorys"/></label>
+            <label>Deficyt budżetowy<input type="checkbox" name="categorys"/></label>
+            <label>Przychody państwa<input type="checkbox" name="categorys"/></label>
+            <label>Wydatki na opiekę socjalną<input type="checkbox" name="categorys"/></label>
+            <label>Wydatki państwa<input type="checkbox" name="categorys"/></label>
+            <label>Wzrost PKB<input type="checkbox" name="categorys"/></label>
+        </div>
+        
 	</body>
 </html>
