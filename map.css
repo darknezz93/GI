@@ -1,28 +1,40 @@
-			svg {
-				background-color: white;
-			}
+svg {
+    background-color: white;
+}
 
-			h1 {
-				color: rgb(115, 115, 115);
-				font-size: 18px;
-				font-family: sans-serif;
-				font-weight: bold;
-				margin: 0;
-				padding-bottom: 10px;
+h1 {
+    color: rgb(115, 115, 115);
+    font-size: 18px;
+    font-family: sans-serif;
+    font-weight: bold;
+    margin: 0;
+    padding-bottom: 10px;
+}
 
-			}
+#container {
+    width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
+}
 
-				#container {
-				width: 800px;
-				margin-left: auto;
-				margin-right: auto;
-				margin-top: 20px;
-				padding: 20px;
-				background-color: white;
-				box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
-			}
+path:hover {
+    fill: rgba(8, 81, 156, 0.2);
+    cursor:pointer;
+}
 
-			path:hover {
-				fill: rgba(8, 81, 156, 0.2);
-				cursor:pointer;
-			}
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 84px;
+  height: 64px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightgrey;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}

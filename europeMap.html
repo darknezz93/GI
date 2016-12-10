@@ -21,6 +21,10 @@
 			//Width and height
 			var w = 800;
 			var h = 600;
+            
+            var div = d3.select("body").append("div")
+                      .attr("class", "tooltip")
+                      .style("opacity", 0);
 
 			//Define map projection
 
@@ -51,8 +55,22 @@
 				   .append("path")
 				   .attr("d", path)
 				   .attr("stroke", "rgba(8, 81, 156, 0.2)")
-				   .attr("fill", "rgba(8, 81, 156, 0.6)");
-		
+				   .attr("fill", "rgba(8, 81, 156, 0.6)")
+                   .on("mouseover", function(d,i) {
+                        var value = 1;
+                        div.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                        div.html("<b>Nazwa panstwa</b><br/>" + value + "%")
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function(d,i) {
+                        div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                    });
+                
 			});
 
 		</script>
