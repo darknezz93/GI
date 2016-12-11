@@ -27,6 +27,13 @@
 			//Width and height
 			var w = 800;
 			var h = 500;
+            var year = 2011;
+            var category = "populacja";
+            var countriesArray = ["Austria", "Bulgaria", "Belgium", "Croatia", "Cyprus", "Czech Republic", "Czech Republic", "Denmark", "Estonia", "Finland", "Germany", "Ireland",
+                                              "France", "Greece", "Spain", "Italy", "Latvia", "Lithuania", "Luxembourg", "Hungary", "Malta", "Netherlands", "Poland", "Portugal",
+                                              "Romania", "Slovenia", "Slovakia", "Sweden", "United Kingdom"];
+            
+            var res = getData(FILE_POPULACJA, countriesArray, [year]);
             
             var div = d3.select("body").append("div")
                       .attr("class", "tooltip")
@@ -52,8 +59,7 @@
 						.attr("height", h);
 
 			//Load in GeoJSON data
-			d3.json("http://localhost:8000/ne_50m_admin_0_countries_simplified.json", function(json) {
-				
+            d3.json("http://localhost:8000/ne_50m_admin_0_countries_simplified.json", function(json) {
 				//Bind data and create one path per GeoJSON feature
 				svg.selectAll("path")
 				   .data(json.features)
@@ -63,11 +69,12 @@
 				   .attr("stroke", "rgba(8, 81, 156, 0.2)")
 				   .attr("fill", "rgba(8, 81, 156, 0.6)")
                    .on("mouseover", function(d,i) {
-                        var value = 1;
+                        var country = json.features[i].properties.admin
+                        var position = countriesArray.indexOf(country);
                         div.transition()
                         .duration(200)
                         .style("opacity", 0.9);
-                        div.html("<b>Nazwa panstwa</b><br/>" + value + "%")
+                        div.html("<b>" + country + "</b><br/>" + res[position][1])
                         .style("left", (d3.event.pageX) + "px")
                         .style("top", (d3.event.pageY - 28) + "px");
                     })
@@ -76,22 +83,18 @@
                         .duration(500)
                         .style("opacity", 0);
                     });
-                
 			});
 
-			//READ DATA DEMO
-			var res = getData(FILE_POPULACJA, ["Poland", "Estonia"], [2014, 2016]);
-			console.log(res);
 		</script>
         
         <div class="checkboxes">
-            <label>Populacja<input type="checkbox"/></label>
-            <label>Inflacja<input type="checkbox"/></label>
-            <label>Deficyt budżetowy<input type="checkbox"/></label>
-            <label>Przychody państwa<input type="checkbox"/></label>
-            <label>Wydatki na opiekę socjalną<input type="checkbox"/></label>
-            <label>Wydatki państwa<input type="checkbox"/></label>
-            <label>Wzrost PKB<input type="checkbox"/></label>
+            <label>Populacja<input id="populacja" type="checkbox"/></label>
+            <label>Inflacja<input id="inflacja" type="checkbox"/></label>
+            <label>Deficyt budżetowy<input id="deficyt" type="checkbox"/></label>
+            <label>Przychody państwa<input id="przychody" type="checkbox"/></label>
+            <label>Wydatki na opiekę socjalną<input id="socjal" type="checkbox"/></label>
+            <label>Wydatki państwa<input id="wydatki" type="checkbox"/></label>
+            <label>Wzrost PKB<input id="pkb" type="checkbox"/></label>
         </div>
         
         <div id="slider">
