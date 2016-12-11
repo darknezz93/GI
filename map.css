@@ -51,3 +51,41 @@ label {
 h1 {
     text-align: center;
 }
+
+#slider {
+    margin-top: 10px;
+}
+
+#slider label {
+    position: absolute;
+    width: 20px;
+    margin-left: -10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* below is not necessary, just for style */
+#slider {
+    width: 50%;
+    margin: 2em auto;
+}
+
+
+
+.steps {
+    border: 1px solid transparent; /*follows #slider2 style for sizing purposes */
+    width: 400px;
+    position: relative;
+    height: 30px;
+}
+
+.tick {
+    border: 1px solid transparent; /*follows slide handle style for sizing purposes*/
+    position: absolute;
+    width: 1.2em;
+    margin-left: -.6em;
+    text-align:center;
+    margin-top:10px;
+    left: 0;
+}
+
