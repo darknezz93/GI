@@ -48,7 +48,14 @@ function getColorValue(val){
         
         return hsv2rgb(h, s, v)
         */
-		return hsl_col_perc((1-val/colorRangeMax)*100, 0, 120);
+		var percent;
+		if(colorRangeMax>0 && colorRangeMin<0){
+			//percent = (1-val/colorRangeMax)*100;
+			percent = (1-(val-colorRangeMin)/(colorRangeMax - colorRangeMin))*100;
+		} else{
+			percent = (1-val/colorRangeMax)*100;
+		}
+		return hsl_col_perc(percent, 0, 120);
 }
 
 function hsl_col_perc(percent,start,end) {

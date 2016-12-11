@@ -45,5 +45,47 @@ function updateResource() {
         } else if(category == "pkb") {
             res = getData(FILE_WZROST_PKB, countriesArray, [year]);
         }
+		
+		updateColorRange(res);
+
+svg.remove();
+svg = d3.select("#container")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+						svg.selectAll("path")
+				   .data(globalJson)
+				   .enter()
+				   .append("path")
+				   .attr("d", path)
+				   .attr("stroke", "rgba(8, 81, 156, 0.2)")
+				   //.attr("fill", "rgba(8, 81, 156, 0.6)")
+				   .attr("fill", function(d) {
+						var val = getPlotValue(res, d.properties.name, 1);
+						if (val == null) { 
+							return "rgba(8, 81, 156, 0.6)";
+						} else{
+							return getColorValue(val);
+						}})
+                   .on("mouseover", function(d,i) {
+                        var country = globalJson[i].properties.admin
+                        var position = countriesArray.indexOf(country);
+                        div.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                        if(position > -1) {
+                            div.html("<b>" + country + "</b><br/>" + res[position][1])
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px")
+                            .style("visibility", "visible");
+                        } else {
+                            div.html("").style("visibility", "hidden");
+                        }
+                    })
+                    .on("mouseout", function(d,i) {
+                        div.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                    });
 }
 

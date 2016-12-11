@@ -51,12 +51,12 @@
 								   .scale([ w/1.5 ]); // zoom, plus la valeur est petit plus le zoom est gros 
 
 			//Define path generator
-			var path = d3.geo.path()
+			path = d3.geo.path()
 							 .projection(projection);
 
 
 			//Create SVG
-			var svg = d3.select("#container")
+			svg = d3.select("#container")
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
@@ -64,6 +64,7 @@
 			//Load in GeoJSON data
             d3.json("http://localhost:8000/ne_50m_admin_0_countries_simplified.json", function(json) {
 				//Bind data and create one path per GeoJSON feature
+				globalJson = json.features;
 				svg.selectAll("path")
 				   .data(json.features)
 				   .enter()
