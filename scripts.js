@@ -44,6 +44,6 @@ function updateResource() {
             res = getData(FILE_WYDATKI_RZADU, countriesArray, [year]);
         } else if(category == "pkb") {
             res = getData(FILE_WZROST_PKB, countriesArray, [year]);
-        }   
+        }
 }
 
