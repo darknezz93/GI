@@ -2,18 +2,23 @@
      
      //domyslnie populacja
      $("#populacja").prop("checked", true);
+     $('#barChart').hide();
 
      $('input:checkbox').click(function() {
         var $box = $(this);
         var num = $(":checkbox:checked").length;
         if(num > 1) {
-            $box.prop("checked", false);
-            alert("Można wybrać maksymalnie 1 kategorię");
+            //$box.prop("checked", false);
+            //alert("Można wybrać maksymalnie 1 kategorię");
+            $('#container').hide();
+            $('#barChart').show();
         } else {
             category = $box.attr('id');
-            updateResource(); 
+            $('#container').show();
+            $('#barChart').hide();
         }
-    
+        updateResource(); 
+
     });
 
     $("#slider").slider({
@@ -88,4 +93,97 @@ svg = d3.select("#container")
                         .style("opacity", 0);
                     });
 }
+
+
+
+function initializeBarChart() {
+    var n = 28, // number of samples
+    m = 1; // number of series
+
+var data = d3.range(m).map(function() { return d3.range(n).map(Math.random); });
+    
+console.log(data);
+    
+var charBarData = [];
+    
+
+    
+for(var i = 1; i < res[0].length; i++) {
+    charBarData[i-1] = [];
+    for(j = 1; j < res.length; j++) {
+        charBarData[i-1][j-1] = parseFloat(res[j][i]);
+    }
+}   
+    
+console.log(charBarData);
+    
+
+var maxValue = getMaxValue(charBarData);
+console.log(maxValue);
+ 
+
+var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    width = 1300 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var y = d3.scale.linear()
+    .domain([0, maxValue])
+    .range([height, 0]);
+
+var x0 = d3.scale.ordinal()
+    .domain(d3.range(n))
+    .rangeBands([0, width], .2);
+
+var x1 = d3.scale.ordinal()
+    .domain(countriesArray)
+    .rangeBands([0, x0.rangeBand()]);
+
+var z = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x0)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg1 = d3.select("#barChart").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("svg1:g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg1.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+svg1.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+svg1.append("g").selectAll("g")
+    .data(charBarData)
+  .enter().append("g")
+    .style("fill", function(d, i) { return z(i); })
+    .attr("transform", function(d, i) { return "translate(" + x1(i) + ",0)"; })
+  .selectAll("rect")
+    .data(function(d) { return d; })
+  .enter().append("rect")
+    .attr("width", x1.rangeBand())
+    .attr("height", y)
+    .attr("x", function(d, i) { return x0(i); })
+    .attr("y", function(d) { return height - y(d); });
+            
+}
+
+function getMaxValue(charBarData) {
+    var values = []
+    for(var i = 0; i < charBarData.length; i++) {
+        values[i] = Math.max.apply(Math, charBarData[i]);
+    }
+    return Math.max.apply(Math, values);
+}
+
 

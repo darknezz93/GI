@@ -2,6 +2,10 @@ svg {
     background-color: white;
 }
 
+svg1 {
+    background-color: white;
+}
+
 h1 {
     color: rgb(115, 115, 115);
     font-size: 18px;
@@ -16,9 +20,21 @@ h1 {
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
+}
+
+#barChart {
+    width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
     padding: 20px;
     background-color: white;
     box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
+    font-size: 8px;
+    
 }
 
 path:hover {
