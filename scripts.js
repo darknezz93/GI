@@ -10,10 +10,26 @@
         if(num > 1) {
             //$box.prop("checked", false);
             //alert("Można wybrać maksymalnie 1 kategorię");
+            if($box.is(":checked")) {
+                categories.push($box.attr('id'))
+            } else {
+                var index = categories.indexOf($box.attr('id'));
+                if (index > -1) {
+                    categories.splice(index, 1);
+                }
+            }
             $('#container').hide();
             $('#barChart').show();
         } else {
-            category = $box.attr('id');
+            if($box.is(":checked")) {
+                categories = [$box.attr('id')];
+            } else {
+                var index = categories.indexOf($box.attr('id'));
+                if (index > -1) {
+                    categories.splice(index, 1);
+                }
+            }
+            
             $('#container').show();
             $('#barChart').hide();
         }
@@ -35,26 +51,40 @@
 });
 
 function updateResource() {
-        if(category == "populacja") {
-            res = getData(FILE_POPULACJA, countriesArray, [year]);
-        } else if(category == "inflacja") {
-            res = getData(FILE_INFLACJA, countriesArray, [year]);
-        } else if(category == "deficyt") {
-            res = getData(FILE_DEFICYT_BUDZETOWY, countriesArray, [year]);
-        } else if(category == "przychody") {
-            res = getData(FILE_PRZYCHODY_RZADU, countriesArray, [year]);
-        } else if(category == "socjal") {
-            res = getData(FILE_WYDATKI_OPIEKA_SOCJALNA, countriesArray, [year]);
-        } else if(category == "wydatki") {
-            res = getData(FILE_WYDATKI_RZADU, countriesArray, [year]);
-        } else if(category == "pkb") {
-            res = getData(FILE_WZROST_PKB, countriesArray, [year]);
+    
+        var tempRes = [];
+    
+        for(var i = 0; i < res.length; i++) {
+            res[i] = res[i].splice(0, 1);
         }
+        
+        for(var i = 0; i < categories.length; i++) {
+            if(categories[i] == "populacja") {
+                tempRes = getData(FILE_POPULACJA, countriesArray, [year]);
+            } else if(categories[i] == "inflacja") {
+                tempRes = getData(FILE_INFLACJA, countriesArray, [year]);
+            } else if(categories[i] == "deficyt") {
+                tempRes = getData(FILE_DEFICYT_BUDZETOWY, countriesArray, [year]);
+            } else if(categories[i] == "przychody") {
+                tempRes = getData(FILE_PRZYCHODY_RZADU, countriesArray, [year]);
+            } else if(categories[i] == "socjal") {
+                tempRes = getData(FILE_WYDATKI_OPIEKA_SOCJALNA, countriesArray, [year]);
+            } else if(categories[i] == "wydatki") {
+                tempRes = getData(FILE_WYDATKI_RZADU, countriesArray, [year]);
+            } else if(categories[i] == "pkb") {
+                tempRes = getData(FILE_WZROST_PKB, countriesArray, [year]);
+            } 
+            for(var j = 0; j < tempRes.length; j++) {
+                res[j].push(tempRes[j][1]);
+            }
+        }
+        //console.log(res);
+
 		
 		updateColorRange(res);
 
-svg.remove();
-svg = d3.select("#container")
+        svg.remove();
+        svg = d3.select("#container")
 						.append("svg")
 						.attr("width", w)
 						.attr("height", h);
@@ -92,91 +122,97 @@ svg = d3.select("#container")
                         .duration(500)
                         .style("opacity", 0);
                     });
+    
+
+    initializeBarChart(true);
 }
 
 
 
-function initializeBarChart() {
-    var n = 28, // number of samples
-    m = 1; // number of series
+function initializeBarChart(remove) {
+    var n = 28; // number of samples
+    var mm = 4;
 
-var data = d3.range(m).map(function() { return d3.range(n).map(Math.random); });
+    var data = d3.range(m).map(function() { return d3.range(n).map(Math.random); });
+        
+    var charBarData = [];
     
-console.log(data);
     
-var charBarData = [];
+    for(var i = 1; i < res[0].length; i++) {
+        charBarData[i-1] = [];
+        for(j = 1; j < res.length; j++) {
+            charBarData[i-1][j-1] = parseFloat(res[j][i]);
+        }
+    }   
     
+    var m = charBarData.length;
+        
+    var maxValue = getMaxValue(charBarData);
+    //console.log(maxValue);
+    //console.log(d3.range(n));
 
+    var margin = {top: 20, right: 30, bottom: 30, left: 90},
+        width = 1450 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
+
+    var y = d3.scale.linear()
+        .domain([0, maxValue])
+        .range([height, 0]);
+
+    var x0 = d3.scale.ordinal()
+        .domain(d3.range(n))
+        .rangeBands([0, width], .2);
+
+    var x1 = d3.scale.ordinal()
+        .domain(d3.range(m))
+        .rangeBands([0, x0.rangeBand()]);
+
+    var z = d3.scale.category10();
+
+    var xAxis = d3.svg.axis()
+        .scale(x0)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
     
-for(var i = 1; i < res[0].length; i++) {
-    charBarData[i-1] = [];
-    for(j = 1; j < res.length; j++) {
-        charBarData[i-1][j-1] = parseFloat(res[j][i]);
+    if(remove) {
+        $("#barChart").html("");
     }
-}   
-    
-console.log(charBarData);
     
 
-var maxValue = getMaxValue(charBarData);
-console.log(maxValue);
- 
+    svg1 = d3.select("#barChart").append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("svg1:g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var margin = {top: 20, right: 30, bottom: 30, left: 40},
-    width = 1300 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    svg1.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
 
-var y = d3.scale.linear()
-    .domain([0, maxValue])
-    .range([height, 0]);
+    svg1.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
-var x0 = d3.scale.ordinal()
-    .domain(d3.range(n))
-    .rangeBands([0, width], .2);
-
-var x1 = d3.scale.ordinal()
-    .domain(countriesArray)
-    .rangeBands([0, x0.rangeBand()]);
-
-var z = d3.scale.category10();
-
-var xAxis = d3.svg.axis()
-    .scale(x0)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
-
-var svg1 = d3.select("#barChart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("svg1:g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-svg1.append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
-
-svg1.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-svg1.append("g").selectAll("g")
-    .data(charBarData)
-  .enter().append("g")
-    .style("fill", function(d, i) { return z(i); })
-    .attr("transform", function(d, i) { return "translate(" + x1(i) + ",0)"; })
-  .selectAll("rect")
-    .data(function(d) { return d; })
-  .enter().append("rect")
-    .attr("width", x1.rangeBand())
-    .attr("height", y)
-    .attr("x", function(d, i) { return x0(i); })
-    .attr("y", function(d) { return height - y(d); });
+    svg1.append("g").selectAll("g")
+        .data(charBarData)
+    .enter().append("g")
+        .style("fill", function(d, i) { return z(i); })
+        .attr("transform", function(d, i) { return "translate(" + x1(i) + ",0)"; })
+    .selectAll("rect")
+        .data(function(d) { return d; })
+    .enter().append("rect")
+        .attr("width", x1.rangeBand())
+        .attr("height", y)
+        .attr("x", function(d, i) { return x0(i); })
+        .attr("y", function(d) { return height - y(d); });
             
 }
+
+
 
 function getMaxValue(charBarData) {
     var values = []
