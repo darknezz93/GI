@@ -29,6 +29,19 @@ h1 {
     box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
 }
 
+#lineChart {
+    width: 1200px;
+    height: 500px;
+    margin-left: 200px;
+    margin-right: auto;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: white;
+    text-align:center;
+    box-shadow: 1px 1px 1px 2px rgb(217, 217, 217);
+    
+}
+
 #barChart {
     width: 1650px;
     margin-left: auto;
@@ -62,6 +75,10 @@ div.tooltip {
 .checkboxes {
     padding-top:10px;
     text-align: center;
+}
+
+.linearCheckBox {
+    text-align: right;
 }
 
 label {

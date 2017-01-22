@@ -33,9 +33,28 @@
             $('#container').show();
             $('#barChart').hide();
         }
+         
+        $('input[name="salary_in.Basic"]:checked').length > 0
         updateResource(); 
 
     });
+     
+     
+     $('#liniowy').click(function(){
+        if(this.checked == true) {
+            $('#container').hide();
+            $('#barChart').hide();
+            $('#checkboxes').hide();
+            $('#lineChart').show();
+        } else {
+            $('#container').show();
+            $('#checkboxes').show();
+            $('#lineChart').hide();
+            $('#barChart').hide();
+            console.log('hide');
+        }
+        updateResource(); 
+     });
 
     $("#slider").slider({
         value: 2011,
@@ -217,7 +236,6 @@ function initializeBarChart(remove) {
 
 function initializeLineChart(){
     
-    
                     var data = [{
                         "sale": "202",
                         "year": "2000"
@@ -266,7 +284,7 @@ function initializeLineChart(){
                             bottom: 20,
                             left: 50
                         },
-                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2000, 2010]),
+                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2010, 2015]),
                         yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134, 215]),
                         xAxis = d3.svg.axis()
                         .scale(xScale),
