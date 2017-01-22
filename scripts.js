@@ -1,7 +1,7 @@
  $(document).ready(function (){
      
      //domyslnie populacja
-     $("#populacja").prop("checked", true);
+     $("#przychody").prop("checked", true);
      $('#barChart').hide();
 
      $('input:checkbox').click(function() {
@@ -150,7 +150,7 @@ function initializeBarChart(remove) {
     var maxValue = getMaxValue(charBarData);
     //console.log(maxValue);
     //console.log(d3.range(n));
-    console.log(res);
+    //console.log(res);
 
     var margin = {top: 20, right: 30, bottom: 30, left: 90},
         width = 1650 - margin.left - margin.right,
