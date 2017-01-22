@@ -5,9 +5,13 @@
      $('#barChart').hide();
 
      $('input:checkbox').click(function() {
+        
         var $box = $(this);
         var num = $(":checkbox:checked").length;
-        if(num > 1) {
+        if($('#liniowy').prop('checked') && num > 2) {
+            alert("Wykres liniowy pozwala na wybór tylko jednej kategorii");
+            $(this).attr('checked', false); 
+        } else if(num > 1) {
             //$box.prop("checked", false);
             //alert("Można wybrać maksymalnie 1 kategorię");
             if($box.is(":checked")) {
@@ -19,6 +23,7 @@
                 }
             }
             $('#container').hide();
+            $('#lineChart').hide();
             $('#barChart').show();
         } else {
             if($box.is(":checked")) {
@@ -32,6 +37,8 @@
             
             $('#container').show();
             $('#barChart').hide();
+            $('#lineChart').hide();
+            $('#liniowy').prop('checked', false);
         }
          
         $('input[name="salary_in.Basic"]:checked').length > 0
@@ -51,7 +58,6 @@
             $('#checkboxes').show();
             $('#lineChart').hide();
             $('#barChart').hide();
-            console.log('hide');
         }
         updateResource(); 
      });
