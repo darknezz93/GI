@@ -195,7 +195,7 @@ function initializeBarChart(remove) {
         .rangeBands([0, x0.rangeBand()]);
 
     var z = d3.scale.category10();
-
+					
     var xAxis = d3.svg.axis()
         .scale(x0)
         .orient("bottom");
@@ -241,46 +241,29 @@ function initializeBarChart(remove) {
 
 
 function initializeLineChart(){
-    
-                    var data = [{
-                        "sale": "202",
-                        "year": "2000"
-                    }, {
-                        "sale": "215",
-                        "year": "2002"
-                    }, {
-                        "sale": "179",
-                        "year": "2004"
-                    }, {
-                        "sale": "199",
-                        "year": "2006"
-                    }, {
-                        "sale": "134",
-                        "year": "2008"
-                    }, {
-                        "sale": "176",
-                        "year": "2010"
-                    }];
-                    var data2 = [{
-                        "sale": "152",
-                        "year": "2000"
-                    }, {
-                        "sale": "189",
-                        "year": "2002"
-                    }, {
-                        "sale": "179",
-                        "year": "2004"
-                    }, {
-                        "sale": "199",
-                        "year": "2006"
-                    }, {
-                        "sale": "134",
-                        "year": "2008"
-                    }, {
-                        "sale": "176",
-                        "year": "2010"
-                    }];
-    
+
+    years1 = [2011, 2012, 2013, 2014, 2015];
+	//var res1 = getData(FILE_PRZYCHODY_RZADU, countriesArray, years1);
+	var myData = [];
+	for(var i=0; i<res.length; i++){
+		var myDataLocalRow = []
+		var rowName = res[i][0]
+		for(var j =1; j<res[i].length; j++){
+			myDataLocalRow[j-1] = {
+				"sale":res[i][j],
+				"year":years1[j-1],
+				"name":rowName
+			};
+			myData[i] = myDataLocalRow;
+		}
+	}
+	
+                    var data = myData[0];
+                    var data2 = myData[1];
+					
+					console.log(data);
+					console.log(data2);
+					
                     var vis = d3.select("#lineChart"),
                         WIDTH = 1000,
                         HEIGHT = 500,
@@ -290,8 +273,10 @@ function initializeLineChart(){
                             bottom: 20,
                             left: 50
                         },
-                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2010, 2015]),
-                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([134, 215]),
+						
+                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2011, 2015]),
+                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([0, 100]),
+
                         xAxis = d3.svg.axis()
                         .scale(xScale),
                         yAxis = d3.svg.axis()
@@ -314,16 +299,20 @@ function initializeLineChart(){
                             return yScale(d.sale);
                         })
                         .interpolate("basis");
-                    vis.append('svg:path')
-                        .attr('d', lineGen(data))
-                        .attr('stroke', 'green')
-                        .attr('stroke-width', 2)
-                        .attr('fill', 'none');
-                    vis.append('svg:path')
-                        .attr('d', lineGen(data2))
-                        .attr('stroke', 'blue')
-                        .attr('stroke-width', 2)
-                        .attr('fill', 'none');
+					var color = d3.scale.category20();
+					for(var k=0; k<myData.length; k++){
+						vis.append('svg:path')
+							.attr('d', lineGen(myData[k]))
+							.attr('stroke', color(k))
+							.attr('stroke-width', 2)
+							.attr('fill', 'none');
+					}
+
+                    //vis.append('svg:path')
+                    //    .attr('d', lineGen(data2))
+                    //    .attr('stroke', 'blue')
+                    //    .attr('stroke-width', 2)
+                    //    .attr('fill', 'none');
 
 }
 
