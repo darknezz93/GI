@@ -130,7 +130,7 @@ function updateResource() {
 
 
 function initializeBarChart(remove) {
-    var n = 28; // number of samples
+    var n = 29; // number of samples
     var mm = 4;
 
     var data = d3.range(m).map(function() { return d3.range(n).map(Math.random); });
@@ -140,8 +140,8 @@ function initializeBarChart(remove) {
     
     for(var i = 1; i < res[0].length; i++) {
         charBarData[i-1] = [];
-        for(j = 1; j < res.length; j++) {
-            charBarData[i-1][j-1] = parseFloat(res[j][i]);
+        for(j = 0; j < res.length; j++) {
+            charBarData[i-1][j] = parseFloat(res[j][i]);
         }
     }   
     
@@ -150,6 +150,7 @@ function initializeBarChart(remove) {
     var maxValue = getMaxValue(charBarData);
     //console.log(maxValue);
     //console.log(d3.range(n));
+    console.log(res);
 
     var margin = {top: 20, right: 30, bottom: 30, left: 90},
         width = 1650 - margin.left - margin.right,
@@ -196,7 +197,7 @@ function initializeBarChart(remove) {
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
-
+    
     svg1.append("g").selectAll("g")
         .data(charBarData)
     .enter().append("g")
@@ -209,7 +210,6 @@ function initializeBarChart(remove) {
         .attr("height", y)
         .attr("x", function(d, i) { return x0(countriesArray[i]); })
         .attr("y", function(d) { return height - y(d); });
-    console.log(x0('Austria'));
             
 }
 
