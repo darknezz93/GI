@@ -6,6 +6,10 @@ svg1 {
     background-color: white;
 }
 
+svg2 {
+    background-color: white;
+}
+
 h1 {
     color: rgb(115, 115, 115);
     font-size: 18px;
@@ -122,5 +126,20 @@ h1 {
 .x.axis path {
   display: none;
 }
+
+
+
+
+        .axis path {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-family: Lato;
+            font-size: 13px;
+        }
+
+
 
 
