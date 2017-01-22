@@ -152,7 +152,7 @@ function initializeBarChart(remove) {
     //console.log(d3.range(n));
 
     var margin = {top: 20, right: 30, bottom: 30, left: 90},
-        width = 1450 - margin.left - margin.right,
+        width = 1650 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
     var y = d3.scale.linear()
@@ -160,7 +160,7 @@ function initializeBarChart(remove) {
         .range([height, 0]);
 
     var x0 = d3.scale.ordinal()
-        .domain(d3.range(n))
+        .domain(countriesArray)
         .rangeBands([0, width], .2);
 
     var x1 = d3.scale.ordinal()
@@ -207,8 +207,9 @@ function initializeBarChart(remove) {
     .enter().append("rect")
         .attr("width", x1.rangeBand())
         .attr("height", y)
-        .attr("x", function(d, i) { return x0(i); })
+        .attr("x", function(d, i) { return x0(countriesArray[i]); })
         .attr("y", function(d) { return height - y(d); });
+    console.log(x0('Austria'));
             
 }
 
