@@ -10,12 +10,17 @@
          
         var selectedCountries = [];
         $('#countriesCheckboxes input:checked').each(function() {
-            selectedCountries.push($(this).attr('name'));
+            selectedCountries.push($(this).attr('id'));
         });
         var num = $(":checkbox:checked").length - selectedCountries.length;
         //console.log(num);
          
-         
+         //console.log(selectedCountries);
+		//if($('#liniowy').prop('checked') && selectedCountries.length>0){
+		//	countriesArray = selectedCountries;
+		//} else {
+		//	countriesArray = allCountries;
+		//}
         if($('#liniowy').prop('checked') && num > 2) {
             alert("Wykres liniowy pozwala na wybór tylko jednej kategorii");
             $(this).attr('checked', false); 
@@ -67,6 +72,7 @@
             $("#lineChart").show();
             $('#lineChart').siblings('#countriesCheckboxes').show();
         } else {
+			countriesArray = allCountries;
             $('#container').show();
             $('#checkboxes').show();
             $("#lineChart").hide();
