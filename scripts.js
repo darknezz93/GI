@@ -7,11 +7,19 @@
      $('input:checkbox').click(function() {
         
         var $box = $(this);
-        var num = $(":checkbox:checked").length;
+         
+        var selectedCountries = [];
+        $('#countriesCheckboxes input:checked').each(function() {
+            selectedCountries.push($(this).attr('name'));
+        });
+        var num = $(":checkbox:checked").length - selectedCountries.length;
+        console.log(num);
+         
+         
         if($('#liniowy').prop('checked') && num > 2) {
             alert("Wykres liniowy pozwala na wybór tylko jednej kategorii");
             $(this).attr('checked', false); 
-        } else if(num > 1) {
+        } else if(num > 1 && selectedCountries.length == 0) {
             //$box.prop("checked", false);
             //alert("Można wybrać maksymalnie 1 kategorię");
             if($box.is(":checked")) {
@@ -23,8 +31,11 @@
                 }
             }
             $('#container').hide();
-            $('#lineChart').hide();
+            $("#lineChart").hide();
+            $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#barChart').show();
+        } else if(selectedCountries.length > 0) {
+            
         } else {
             if($box.is(":checked")) {
                 categories = [$box.attr('id')];
@@ -37,7 +48,8 @@
             
             $('#container').show();
             $('#barChart').hide();
-            $('#lineChart').hide();
+            $("#lineChart").hide();
+            $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#liniowy').prop('checked', false);
         }
          
@@ -52,11 +64,13 @@
             $('#container').hide();
             $('#barChart').hide();
             $('#checkboxes').hide();
-            $('#lineChart').show();
+            $("#lineChart").show();
+            $('#lineChart').siblings('#countriesCheckboxes').show();
         } else {
             $('#container').show();
             $('#checkboxes').show();
-            $('#lineChart').hide();
+            $("#lineChart").hide();
+            $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#barChart').hide();
         }
         updateResource(); 
@@ -261,8 +275,8 @@ function initializeLineChart(){
                     var data = myData[0];
                     var data2 = myData[1];
 					
-					console.log(data);
-					console.log(data2);
+					//console.log(data);
+					//console.log(data2);
 					
                     var vis = d3.select("#lineChart"),
                         WIDTH = 1000,

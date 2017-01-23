@@ -26,8 +26,35 @@
         <h1>Dane o Europie</h1>
     </div>
     
-    <svg id="lineChart"></svg>
-    
+    <svg id="lineChart">
+        <div id="countriesCheckboxes">
+            <label>Austria<input id="Austria" type="checkbox"/></label>
+            <label>Bulgaria<input id="Bulgaria" type="checkbox"/></label>
+            <label>Belgium<input id="Belgium" type="checkbox"/></label>
+            <label>Czech Republic<input id="CzechRepublic" type="checkbox"/></label>
+            <label>Estonia<input id="Estonia" type="checkbox"/></label>
+            <label>Finland<input id="Finland" type="checkbox"/></label>
+            <label>Germany<input id="Germany" type="checkbox"/></label>
+            <label>Ireland<input id="Ireland" type="checkbox"/></label>
+            <label>France<input id="France" type="checkbox"/></label>
+            <label>Greece<input id="Greece" type="checkbox"/></label>
+            <label>Spain<input id="Spain" type="checkbox"/></label>
+            <label>Italy<input id="Italy" type="checkbox"/></label>
+            <label>Latvia<input id="Latvia" type="checkbox"/></label>
+            <label>Lithuania<input id="Lithuania" type="checkbox"/></label>
+            <label>Luxembourg<input id="Luxembourg" type="checkbox"/></label>
+            <label>Hungary<input id="Hungary" type="checkbox"/></label>
+            <label>Malta<input id="Malta" type="checkbox"/></label>
+            <label>Netherlands<input id="Netherlands" type="checkbox"/></label>
+            <label>Poland<input id="Poland" type="checkbox"/></label>
+            <label>Portugal<input id="Portugal" type="checkbox"/></label>
+            <label>Romania<input id="Romania" type="checkbox"/></label>
+            <label>Slovenia<input id="Slovenia" type="checkbox"/></label>
+            <label>Slovakia<input id="Slovakia" type="checkbox"/></label>
+            <label>Sweden<input id="Sweden" type="checkbox"/></label>
+            <label>United Kingdom<input id="UnitedKingdom" type="checkbox"/></label>
+        </div>
+    </svg>
     
     
 		
@@ -63,7 +90,8 @@
 			path = d3.geo.path()
 							 .projection(projection);
             
-             $("#lineChart").hide();
+            $("#lineChart").hide();
+            $("#lineChart").siblings('#countriesCheckboxes').hide();
 
 
 			//Create SVG
