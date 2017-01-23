@@ -13,7 +13,7 @@
             selectedCountries.push($(this).attr('name'));
         });
         var num = $(":checkbox:checked").length - selectedCountries.length;
-        console.log(num);
+        //console.log(num);
          
          
         if($('#liniowy').prop('checked') && num > 2) {
@@ -96,27 +96,47 @@ function updateResource() {
         for(var i = 0; i < res.length; i++) {
             res[i] = res[i].splice(0, 1);
         }
-        
-        for(var i = 0; i < categories.length; i++) {
-            if(categories[i] == "populacja") {
-                tempRes = getData(FILE_POPULACJA, countriesArray, [year]);
-            } else if(categories[i] == "inflacja") {
-                tempRes = getData(FILE_INFLACJA, countriesArray, [year]);
-            } else if(categories[i] == "deficyt") {
-                tempRes = getData(FILE_DEFICYT_BUDZETOWY, countriesArray, [year]);
-            } else if(categories[i] == "przychody") {
-                tempRes = getData(FILE_PRZYCHODY_RZADU, countriesArray, [year]);
-            } else if(categories[i] == "socjal") {
-                tempRes = getData(FILE_WYDATKI_OPIEKA_SOCJALNA, countriesArray, [year]);
-            } else if(categories[i] == "wydatki") {
-                tempRes = getData(FILE_WYDATKI_RZADU, countriesArray, [year]);
-            } else if(categories[i] == "pkb") {
-                tempRes = getData(FILE_WZROST_PKB, countriesArray, [year]);
-            } 
-            for(var j = 0; j < tempRes.length; j++) {
-                res[j].push(tempRes[j][1]);
-            }
-        }
+		
+		if($('#liniowy').prop('checked')){
+			var years = [2010, 2011, 2012, 2013, 2014, 2015]
+			if(categories[0] == "populacja") {
+					res = getData(FILE_POPULACJA, countriesArray, years);
+				} else if(categories[0] == "inflacja") {
+					res = getData(FILE_INFLACJA, countriesArray, years);
+				} else if(categories[0] == "deficyt") {
+					res = getData(FILE_DEFICYT_BUDZETOWY, countriesArray, years);
+				} else if(categories[0] == "przychody") {
+					res = getData(FILE_PRZYCHODY_RZADU, countriesArray, years);
+				} else if(categories[0] == "socjal") {
+					res = getData(FILE_WYDATKI_OPIEKA_SOCJALNA, countriesArray, years);
+				} else if(categories[0] == "wydatki") {
+					res = getData(FILE_WYDATKI_RZADU, countriesArray, years);
+				} else if(categories[0] == "pkb") {
+					res = getData(FILE_WZROST_PKB, countriesArray, years);
+				} 
+		} else {
+					
+			for(var i = 0; i < categories.length; i++) {
+				if(categories[i] == "populacja") {
+					tempRes = getData(FILE_POPULACJA, countriesArray, [year]);
+				} else if(categories[i] == "inflacja") {
+					tempRes = getData(FILE_INFLACJA, countriesArray, [year]);
+				} else if(categories[i] == "deficyt") {
+					tempRes = getData(FILE_DEFICYT_BUDZETOWY, countriesArray, [year]);
+				} else if(categories[i] == "przychody") {
+					tempRes = getData(FILE_PRZYCHODY_RZADU, countriesArray, [year]);
+				} else if(categories[i] == "socjal") {
+					tempRes = getData(FILE_WYDATKI_OPIEKA_SOCJALNA, countriesArray, [year]);
+				} else if(categories[i] == "wydatki") {
+					tempRes = getData(FILE_WYDATKI_RZADU, countriesArray, [year]);
+				} else if(categories[i] == "pkb") {
+					tempRes = getData(FILE_WZROST_PKB, countriesArray, [year]);
+				} 
+				for(var j = 0; j < tempRes.length; j++) {
+					res[j].push(tempRes[j][1]);
+				}
+			}
+		}
         //console.log(res);
 
 		
@@ -255,10 +275,13 @@ function initializeBarChart(remove) {
 
 
 function initializeLineChart(){
-
-    years1 = [2011, 2012, 2013, 2014, 2015];
+	$("#lineChart").html("");
+    years1 = [2010, 2011, 2012, 2013, 2014, 2015];
 	//var res1 = getData(FILE_PRZYCHODY_RZADU, countriesArray, years1);
+	console.log(res);
 	var myData = [];
+	var min = res[0][1];
+	var max = res[0][1];
 	for(var i=0; i<res.length; i++){
 		var myDataLocalRow = []
 		var rowName = res[i][0]
@@ -268,17 +291,17 @@ function initializeLineChart(){
 				"year":years1[j-1],
 				"name":rowName
 			};
+			if(res[i][j]>max){
+				max = res[i][j];
+			}
+			if(res[i][j]<min){
+				min = res[i][j];
+			}
 			myData[i] = myDataLocalRow;
 		}
 	}
-	
-                    var data = myData[0];
-                    var data2 = myData[1];
+                    vis = d3.select("#lineChart"),
 					
-					//console.log(data);
-					//console.log(data2);
-					
-                    var vis = d3.select("#lineChart"),
                         WIDTH = 1000,
                         HEIGHT = 500,
                         MARGINS = {
@@ -288,15 +311,14 @@ function initializeLineChart(){
                             left: 50
                         },
 						
-                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2011, 2015]),
-                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([0, 100]),
+                        xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2010, 2015]),
+                        yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([min, max]),
 
                         xAxis = d3.svg.axis()
                         .scale(xScale),
                         yAxis = d3.svg.axis()
                         .scale(yScale)
                         .orient("left");
-                    
                     vis.append("svg:g")
                         .attr("class", "x axis")
                         .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
