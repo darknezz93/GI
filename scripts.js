@@ -14,16 +14,16 @@ $(document).ready(function (){
         //var selectedCountries = [];
          
         $('#countriesCheckboxes input:checked').each(function() {
-            var id = $(this).attr('id');
+            var id = getValidCountryId($(this).attr('id'));
             if($(this).is(":checked")) {
                 if(selectedCountries.indexOf(id) == -1) {
-                    selectedCountries.push($(this).attr('id'));
+                    selectedCountries.push(getValidCountryId($(this).attr('id')));
                 }
             }
         });
          
         $('#countriesCheckboxes input:not(:checked)').each(function() {
-            var id = $(this).attr('id');
+            var id = getValidCountryId($(this).attr('id'));
             var index = selectedCountries.indexOf(id);
             if (index > -1) {
                 selectedCountries.splice(index, 1);
@@ -31,7 +31,7 @@ $(document).ready(function (){
         });
          
         $('#countriesCheckboxes input:not(:checked)').each(function() {
-            var index = selectedCountries.indexOf($box.attr('id'));
+            var index = selectedCountries.indexOf(getValidCountryId($box.attr('id')));
         });
         var num = $(":checkbox:checked").length - selectedCountries.length;
         //console.log(num);
@@ -490,7 +490,6 @@ function initializeLineChart(firstOpen){
 							.attr('stroke', tcolor)
 							.attr('stroke-width', 2)
 							.attr('fill', 'none');
-							console.log(myData[k])
 						legend_data.push({
 							name:myData[k][0].name,
 							color:tcolor
@@ -535,7 +534,15 @@ function initializeLineChart(firstOpen){
 }
 
 
-
+function getValidCountryId(keksimus){
+	if(keksimus === "CzechRepublic"){
+		return "Czech Republic";
+	} else if (keksimus ==="UnitedKingdom"){
+		return "United Kingdom";
+	} else {
+		return keksimus;
+	}
+}
 
 function getMaxValue(charBarData) {
     var values = []

@@ -43,6 +43,7 @@ var countryMap = {
 	"Croatia":"HR",
 	"Cyprus":"CY",
 	"Czech Republic":"CZ",
+	"CzechRepublic":"CZ",
 	"Denmark":"DK",
 	"Estonia":"EE",
 	"Finland":"FI",
@@ -64,6 +65,7 @@ var countryMap = {
 	"Slovenia":"SI",
 	"Slovakia":"SK",
 	"Sweden":"SE",
+	"UnitedKingdom":"UK",
 	"United Kingdom":"UK"
 }
 
