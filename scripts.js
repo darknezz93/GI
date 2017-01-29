@@ -1,35 +1,51 @@
- $(document).ready(function (){
+var selectedCountries = []
+
+$(document).ready(function (){
      
      //domyslnie populacja
      $("#przychody").prop("checked", true);
+     //$("#Austria").prop("checked", true);
      $('#barChart').hide();
 
      $('input:checkbox').click(function() {
         
         var $box = $(this);
          
-        var selectedCountries = [];
+        //var selectedCountries = [];
+         
         $('#countriesCheckboxes input:checked').each(function() {
-            selectedCountries.push($(this).attr('id'));
+            var id = $(this).attr('id');
+            if($(this).is(":checked")) {
+                if(selectedCountries.indexOf(id) == -1) {
+                    selectedCountries.push($(this).attr('id'));
+                }
+            }
+        });
+         
+        $('#countriesCheckboxes input:not(:checked)').each(function() {
+            var id = $(this).attr('id');
+            var index = selectedCountries.indexOf(id);
+            if (index > -1) {
+                selectedCountries.splice(index, 1);
+            }
+        });
+         
+        $('#countriesCheckboxes input:not(:checked)').each(function() {
+            var index = selectedCountries.indexOf($box.attr('id'));
         });
         var num = $(":checkbox:checked").length - selectedCountries.length;
         //console.log(num);
          
-         //console.log(selectedCountries);
-		//if($('#liniowy').prop('checked') && selectedCountries.length>0){
-		//	countriesArray = selectedCountries;
-		//} else {
-		//	countriesArray = allCountries;
-		//}
         if($('#liniowy').prop('checked') && num > 2) {
             alert("Wykres liniowy pozwala na wybór tylko jednej kategorii");
             $(this).attr('checked', false); 
         } else if(num > 1 && selectedCountries.length == 0) {
             //$box.prop("checked", false);
-            //alert("Można wybrać maksymalnie 1 kategorię");
-            if($box.is(":checked")) {
+            if($box.parent()[0].parentElement.className == 'checkboxes' && $box.is(":checked")) {
+                console.log("CHUJ1");
                 categories.push($box.attr('id'))
-            } else {
+            } else if($box.parent()[0].parentElement.className == 'checkboxes' && !$box.is(":checked")) {
+                console.log("CHUJ2");
                 var index = categories.indexOf($box.attr('id'));
                 if (index > -1) {
                     categories.splice(index, 1);
@@ -40,11 +56,22 @@
             $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#barChart').show();
         } else if(selectedCountries.length > 0) {
-            
+            if($box.parent()[0].parentElement.className == 'checkboxes' && $box.is(":checked")) {
+                console.log("CHUJ3");
+                categories = [$box.attr('id')]
+            } else if($box.parent()[0].parentElement.className == 'checkboxes' && !$box.is(":checked")) {
+                console.log("CHUJ4");
+                var index = categories.indexOf($box.attr('id'));
+                if (index > -1) {
+                    categories.splice(index, 1);
+                }
+            }
         } else {
             if($box.is(":checked")) {
-                categories = [$box.attr('id')];
+                console.log("CHUJ5");
+                categories.push($box.attr('id'));
             } else {
+                console.log("CHUJ6");
                 var index = categories.indexOf($box.attr('id'));
                 if (index > -1) {
                     categories.splice(index, 1);
@@ -52,14 +79,17 @@
             }
             
             $('#container').show();
+            $('#slider').show();
             $('#barChart').hide();
             $("#lineChart").hide();
             $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#liniowy').prop('checked', false);
         }
          
-        $('input[name="salary_in.Basic"]:checked').length > 0
-        updateResource(); 
+        updateResource();
+         
+        console.log(categories);
+        console.log(selectedCountries);
 
     });
      
@@ -71,6 +101,7 @@
             $('#checkboxes').hide();
             $("#lineChart").show();
             $('#lineChart').siblings('#countriesCheckboxes').show();
+            $('#slider').hide();
         } else {
 			countriesArray = allCountries;
             $('#container').show();
@@ -78,8 +109,9 @@
             $("#lineChart").hide();
             $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#barChart').hide();
+            $('#slider').show();
         }
-        updateResource(); 
+        updateResource(true); 
      });
 
     $("#slider").slider({
@@ -95,7 +127,7 @@
  
 });
 
-function updateResource() {
+function updateResource(firstOpenLineChart) {
     
         var tempRes = [];
     
@@ -190,7 +222,7 @@ function updateResource() {
     
 
     initializeBarChart(true);
-    initializeLineChart();
+    initializeLineChart(firstOpenLineChart);
 }
 
 
@@ -280,32 +312,57 @@ function initializeBarChart(remove) {
 }
 
 
-function initializeLineChart(){
+function initializeLineChart(firstOpen){
 	$("#lineChart").html("");
     years1 = [2010, 2011, 2012, 2013, 2014, 2015];
 	//var res1 = getData(FILE_PRZYCHODY_RZADU, countriesArray, years1);
-	console.log(res);
+	//console.log(res);
 	var myData = [];
 	var min = res[0][1];
 	var max = res[0][1];
-	for(var i=0; i<res.length; i++){
+    var rength = 0;
+    
+    //$("#Austria").prop("checked", true);
+    
+    var myDataIndex = 0;
+    
+    var tempRes = [];
+    for(var i = 0; i < res.length; i++) {
+        if(selectedCountries.includes(res[i][0])) {
+            tempRes.push(res[i]);
+        }
+    }
+    
+    if(firstOpen) {
+       length = 1;
+    } else {
+        length = tempRes.length;
+    }
+    
+    //console.log(tempRes);
+    
+	for(var i=0; i<length; i++){
 		var myDataLocalRow = []
-		var rowName = res[i][0]
-		for(var j =1; j<res[i].length; j++){
-			myDataLocalRow[j-1] = {
-				"sale":res[i][j],
+		var rowName = tempRes[i][0]
+		for(var j =1; j<tempRes[i].length; j++){
+            //console.log(res[i]);
+                myDataLocalRow[j-1] = {
+				"sale":tempRes[i][j],
 				"year":years1[j-1],
 				"name":rowName
 			};
-			if(res[i][j]>max){
-				max = res[i][j];
+			if(tempRes[i][j]>max){
+				max = tempRes[i][j];
 			}
-			if(res[i][j]<min){
-				min = res[i][j];
+			if(tempRes[i][j]<min){
+				min = tempRes[i][j];
 			}
+            //console.log(myDataLocalRow);
 			myData[i] = myDataLocalRow;
+            myDataIndex++;
 		}
 	}
+    //console.log(myData);
                     vis = d3.select("#lineChart"),
 					
                         WIDTH = 1000,

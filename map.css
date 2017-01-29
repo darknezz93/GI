@@ -30,11 +30,12 @@ h1 {
 }
 
 #lineChart {
-    width: 1200px;
+    width: 1400px;
     height: 500px;
     margin-left: 200px;
     margin-right: auto;
     margin-top: 20px;
+    padding-left: 200px;
     padding: 10px;
     background-color: white;
     text-align:center;
