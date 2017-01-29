@@ -51,10 +51,16 @@ $(document).ready(function (){
                     categories.splice(index, 1);
                 }
             }
-            $('#container').hide();
-            $("#lineChart").hide();
-            $('#lineChart').siblings('#countriesCheckboxes').hide();
-            $('#barChart').show();
+            
+            if($box.parent()[0].parentElement.className == 'checkboxes') {
+                
+            }
+            if($box.parent()[0].parentElement.id != 'countriesCheckboxes') {
+                $('#container').hide();
+                $("#lineChart").hide();
+                $('#lineChart').siblings('#countriesCheckboxes').hide();
+                $('#barChart').show();
+            }
         } else if(selectedCountries.length > 0) {
             if($box.parent()[0].parentElement.className == 'checkboxes' && $box.is(":checked")) {
                 console.log("CHUJ3");
@@ -110,6 +116,9 @@ $(document).ready(function (){
             $('#lineChart').siblings('#countriesCheckboxes').hide();
             $('#barChart').hide();
             $('#slider').show();
+            selectedCountries = [];
+            $('#countriesCheckboxes input:checkbox').attr('checked',false);
+            
         }
         updateResource(true); 
      });
