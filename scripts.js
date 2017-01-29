@@ -397,8 +397,8 @@ function initializeLineChart(firstOpen){
 	//var res1 = getData(FILE_PRZYCHODY_RZADU, countriesArray, years1);
 	//console.log(res);
 	var myData = [];
-	var min = res[0][1];
-	var max = res[0][1];
+	var min = parseFloat(res[0][1]);
+	var max = parseFloat(res[0][1]);
     var rength = 0;
     
     //$("#Austria").prop("checked", true);
@@ -426,15 +426,15 @@ function initializeLineChart(firstOpen){
 		for(var j =1; j<tempRes[i].length; j++){
             //console.log(res[i]);
                 myDataLocalRow[j-1] = {
-				"sale":tempRes[i][j],
+				"sale":parseFloat(tempRes[i][j]),
 				"year":years1[j-1],
 				"name":rowName
 			};
-			if(tempRes[i][j]>max){
-				max = tempRes[i][j];
+			if(parseFloat(tempRes[i][j])>max){
+				max = parseFloat(tempRes[i][j]);
 			}
-			if(tempRes[i][j]<min){
-				min = tempRes[i][j];
+			if(parseFloat(tempRes[i][j])<min){
+				min = parseFloat(tempRes[i][j]);
 			}
             //console.log(myDataLocalRow);
 			myData[i] = myDataLocalRow;
