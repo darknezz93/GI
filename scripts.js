@@ -42,10 +42,8 @@ $(document).ready(function (){
         } else if(num > 1 && selectedCountries.length == 0) {
             //$box.prop("checked", false);
             if($box.parent()[0].parentElement.className == 'checkboxes' && $box.is(":checked")) {
-                console.log("CHUJ1");
                 categories.push($box.attr('id'))
             } else if($box.parent()[0].parentElement.className == 'checkboxes' && !$box.is(":checked")) {
-                console.log("CHUJ2");
                 var index = categories.indexOf($box.attr('id'));
                 if (index > -1) {
                     categories.splice(index, 1);
@@ -63,10 +61,8 @@ $(document).ready(function (){
             }
         } else if(selectedCountries.length > 0) {
             if($box.parent()[0].parentElement.className == 'checkboxes' && $box.is(":checked")) {
-                console.log("CHUJ3");
                 categories = [$box.attr('id')]
             } else if($box.parent()[0].parentElement.className == 'checkboxes' && !$box.is(":checked")) {
-                console.log("CHUJ4");
                 var index = categories.indexOf($box.attr('id'));
                 if (index > -1) {
                     categories.splice(index, 1);
@@ -74,10 +70,8 @@ $(document).ready(function (){
             }
         } else {
             if($box.is(":checked")) {
-                console.log("CHUJ5");
                 categories.push($box.attr('id'));
             } else {
-                console.log("CHUJ6");
                 var index = categories.indexOf($box.attr('id'));
                 if (index > -1) {
                     categories.splice(index, 1);
@@ -94,8 +88,8 @@ $(document).ready(function (){
          
         updateResource();
          
-        console.log(categories);
-        console.log(selectedCountries);
+        //console.log(categories);
+        //console.log(selectedCountries);
 
     });
      
@@ -248,9 +242,17 @@ function initializeBarChart(remove) {
     for(var i = 1; i < res[0].length; i++) {
         charBarData[i-1] = [];
         for(j = 0; j < res.length; j++) {
-            charBarData[i-1][j] = parseFloat(res[j][i]);
+            if(res[j][i] > 10000) {
+                charBarData[i-1][j] = parseFloat(res[j][i])/1000000;
+            } else if(res[j][i] <= 10000 && res[j][i] > 100) {
+                 charBarData[i-1][j] = parseFloat(res[j][i])/1000;  
+            } else {
+                charBarData[i-1][j] = parseFloat(res[j][i]);  
+            }
         }
-    }   
+    }
+    
+    //console.log(charBarData);
     
     var m = charBarData.length;
         
@@ -324,7 +326,26 @@ function initializeBarChart(remove) {
         .attr("width", x1.rangeBand())
         .attr("height", y)
         .attr("x", function(d, i) { return x0(countriesShortcuts[i]); })
-        .attr("y", function(d) { return height - y(d); });
+        .attr("y", function(d) { return height - y(d); })
+    .on("mouseover", function(d,i) {
+            console.log(charBarData);
+            div.transition()
+            .duration(200)
+            .style("opacity", 0.9);
+            if(position > -1) {
+                    div.html("<b>" + country + "</b><br/>" + res[position][1])
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px")
+                    .style("visibility", "visible");
+                } else {
+                    div.html("").style("visibility", "hidden");
+                }
+            })
+            .on("mouseout", function(d,i) {
+                 div.transition()
+                .duration(500)
+                .style("opacity", 0);
+             });
             
 }
 
@@ -407,6 +428,8 @@ function initializeLineChart(firstOpen){
                         .attr("class", "y axis")
                         .attr("transform", "translate(" + (MARGINS.left) + ",0)")
                         .call(yAxis);
+                            
+    
                     var lineGen = d3.svg.line()
                         .x(function(d) {
                             return xScale(d.year);
