@@ -67,6 +67,17 @@ var countryMap = {
 	"United Kingdom":"UK"
 }
 
+categoryLabelsMap = {
+	        
+            "populacja":"Populacja",
+            "inflacja":"Inflacja",
+            "deficyt":"Deficyt budżetowy",
+            "przychody":"Przychody państwa",
+            "socjal":"Wydatki na opiekę socjalną",
+            "wydatki":"Wydatki państwa",
+            "pkb":"Wzrost PKB"
+}
+
 var data;
 
 function getData(file, countries, years){

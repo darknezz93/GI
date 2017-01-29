@@ -270,7 +270,9 @@ function initializeBarChart(remove) {
         }
     }
 
-    var margin = {top: 20, right: 30, bottom: 30, left: 90},
+	
+	
+    var margin = {top: 20 + categories.length * 20, right: 30, bottom: 30, left: 90},
         width = 1650 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
 
@@ -299,6 +301,8 @@ function initializeBarChart(remove) {
     if(remove) {
         $("#barChart").html("");
     }
+	
+	var color_hash = [];
 
     svg1 = d3.select("#barChart").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -318,7 +322,11 @@ function initializeBarChart(remove) {
     svg1.append("g").selectAll("g")
         .data(charBarData)
     .enter().append("g")
-        .style("fill", function(d, i) { return z(i); })
+        .style("fill", function(d, i) { 
+			var color = z(i);
+			color_hash.push(color);
+			return color; 
+		})
         .attr("transform", function(d, i) { return "translate(" + x1(i) + ",0)"; })
     .selectAll("rect")
         .data(function(d) { return d; })
@@ -347,6 +355,39 @@ function initializeBarChart(remove) {
                 .style("opacity", 0);
              });
             
+			// add legend   
+	var legend = svg1.append("g")
+	  .attr("class", "legend")
+        //.attr("x", w - 65)
+        //.attr("y", 50)
+	  .attr("height", 100)
+	  .attr("width", 100);
+    //.attr('transform', 'translate(-20,50)')    
+    
+    legend.selectAll('rect')
+      .data(charBarData)
+      .enter()
+      .append("rect")
+	  .attr("x", 10 - margin.left)
+      .attr("y", function(d, i){ return (i *  20) - (margin.top);})
+	  .attr("width", 10)
+	  .attr("height", 10)
+	  .style("fill", function(d) { 
+        var color = color_hash[charBarData.indexOf(d)];
+        return color;
+      })
+      
+    legend.selectAll('text')
+      .data(charBarData)
+      .enter()
+      .append("text")
+	  .attr("x", 23 - margin.left)
+	  .attr("width", margin.left-23)
+      .attr("y", function(d, i){ return (i *  20 + 9) - (margin.top);})
+	  .text(function(d) {
+        var text = categoryLabelsMap[categories[charBarData.indexOf(d)]];
+        return text;
+      });
 }
 
 
