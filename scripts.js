@@ -442,6 +442,9 @@ function initializeLineChart(firstOpen){
 		}
 	}
     //console.log(myData);
+	
+	var legend_data = [];
+
                     vis = d3.select("#lineChart"),
 					
                         WIDTH = 1000,
@@ -450,7 +453,7 @@ function initializeLineChart(firstOpen){
                             top: 20,
                             right: 20,
                             bottom: 20,
-                            left: 50
+                            left: 150
                         },
 						
                         xScale = d3.scale.linear().range([MARGINS.left, WIDTH - MARGINS.right]).domain([2010, 2015]),
@@ -481,11 +484,17 @@ function initializeLineChart(firstOpen){
                         .interpolate("basis");
 					var color = d3.scale.category20();
 					for(var k=0; k<myData.length; k++){
+						var tcolor = color(k);
 						vis.append('svg:path')
 							.attr('d', lineGen(myData[k]))
-							.attr('stroke', color(k))
+							.attr('stroke', tcolor)
 							.attr('stroke-width', 2)
 							.attr('fill', 'none');
+							console.log(myData[k])
+						legend_data.push({
+							name:myData[k][0].name,
+							color:tcolor
+						})
 					}
 
                     //vis.append('svg:path')
@@ -493,7 +502,36 @@ function initializeLineChart(firstOpen){
                     //    .attr('stroke', 'blue')
                     //    .attr('stroke-width', 2)
                     //    .attr('fill', 'none');
-
+		// add legend   
+	var legend = vis.append("g")
+	  .attr("class", "legend")
+        //.attr("x", w - 65)
+        //.attr("y", 50)
+	  .attr("height", 100)
+	  .attr("width", 100);
+    //.attr('transform', 'translate(-20,50)')    
+    
+    legend.selectAll('rect')
+      .data(legend_data)
+      .enter()
+      .append("rect")
+	  .attr("x", 10)
+      .attr("y", function(d, i){ return (i *  20);})
+	  .attr("width", 10)
+	  .attr("height", 10)
+	  .style("fill", function(d) { 
+        return d.color;
+      })
+      
+    legend.selectAll('text')
+      .data(legend_data)
+      .enter()
+      .append("text")
+	  .attr("x", 23)
+      .attr("y", function(d, i){ return (i *  20 + 9);})
+	  .text(function(d) {
+        return d.name;
+      });
 }
 
 
