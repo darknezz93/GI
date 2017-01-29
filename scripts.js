@@ -117,7 +117,7 @@ $(document).ready(function (){
             $('#barChart').hide();
             $('#slider').show();
             selectedCountries = [];
-            $('#countriesCheckboxes input:checkbox').attr('checked',false);
+            $('#countriesCheckboxes input:checkbox').attr('checked', false);
             
         }
         updateResource(true); 
@@ -258,6 +258,15 @@ function initializeBarChart(remove) {
     //console.log(maxValue);
     //console.log(d3.range(n));
     //console.log(res);
+    
+    var countriesShortcuts = [];
+    for(var i = 0; i < countriesArray.length; i++) {
+        if(countriesArray[i].length > 7) {
+            countriesShortcuts.push(countriesArray[i].substring(0,7) + ".");
+        } else {
+            countriesShortcuts.push(countriesArray[i]);
+        }
+    }
 
     var margin = {top: 20, right: 30, bottom: 30, left: 90},
         width = 1650 - margin.left - margin.right,
@@ -268,7 +277,7 @@ function initializeBarChart(remove) {
         .range([height, 0]);
 
     var x0 = d3.scale.ordinal()
-        .domain(countriesArray)
+        .domain(countriesShortcuts)
         .rangeBands([0, width], .2);
 
     var x1 = d3.scale.ordinal()
@@ -288,7 +297,6 @@ function initializeBarChart(remove) {
     if(remove) {
         $("#barChart").html("");
     }
-    
 
     svg1 = d3.select("#barChart").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -315,7 +323,7 @@ function initializeBarChart(remove) {
     .enter().append("rect")
         .attr("width", x1.rangeBand())
         .attr("height", y)
-        .attr("x", function(d, i) { return x0(countriesArray[i]); })
+        .attr("x", function(d, i) { return x0(countriesShortcuts[i]); })
         .attr("y", function(d) { return height - y(d); });
             
 }
