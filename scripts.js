@@ -238,7 +238,6 @@ function initializeBarChart(remove) {
         
     var charBarData = [];
     
-    
     for(var i = 1; i < res[0].length; i++) {
         charBarData[i-1] = [];
         for(j = 0; j < res.length; j++) {
@@ -332,11 +331,13 @@ function initializeBarChart(remove) {
         .data(function(d) { return d; })
     .enter().append("rect")
         .attr("width", x1.rangeBand())
-        .attr("height", y)
+        .attr("height", function(d) {
+		return (y(0) - y(d));
+   })
         .attr("x", function(d, i) { return x0(countriesShortcuts[i]); })
-        .attr("y", function(d) { return height - y(d); })
+        .attr("y", function(d) { return y(d); })
     .on("mouseover", function(d,i) {
-            console.log(charBarData);
+            //console.log(charBarData);
             div.transition()
             .duration(200)
             .style("opacity", 0.9);
